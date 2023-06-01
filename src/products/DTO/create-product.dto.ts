@@ -11,5 +11,5 @@ export class CreateProductDto {
   price: number;
 
   @IsString()
-  created_by: string;
+  uploaded_by: string;
 }

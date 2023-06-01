@@ -13,17 +13,17 @@ export class Product {
   @PrimaryGeneratedColumn('uuid')
   id: UUID;
 
-  @Column({ nullable: true, type: 'text' })
+  @Column({ type: 'text', unique: true })
   name: string;
 
-  @Column({ nullable: true, type: 'integer' })
+  @Column({ type: 'integer', default: 0 })
   stock: number;
 
-  @Column({ nullable: true, type: 'decimal' })
+  @Column({ type: 'decimal', default: 0.0 })
   price: number;
 
-  @Column({ nullable: true, type: 'text' })
-  created_by: string;
+  @Column({ type: 'text' })
+  uploaded_by: string;
 
   @CreateDateColumn()
   created_at: Date;
