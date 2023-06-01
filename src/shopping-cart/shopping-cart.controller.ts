@@ -15,6 +15,7 @@ import { CreateShoppingCartDto } from './DTO/create-shopping-cart.dto';
 import {
   IcreateResponse,
   IfindOneResponse,
+  IlistAllResponse,
   IupdateResponse,
 } from 'src/common.interfaces';
 import { UUID } from 'crypto';
@@ -39,6 +40,21 @@ export class ShoppingCartController {
       status_code: 200,
       status_message: 'El carrito se encontró correctamente.',
       data: cart,
+    };
+  }
+
+  @Get('/listAll')
+  async listAll(): Promise<IlistAllResponse<ShoppingCart>> {
+    const shoppingCarts = await this.service.listAll();
+
+    if (!shoppingCarts) {
+      throw new NotFoundException('No hay carritos guardados');
+    }
+
+    return {
+      status_code: 200,
+      status_message: 'Se encontraron los carritos correctamente.',
+      data: shoppingCarts,
     };
   }
 

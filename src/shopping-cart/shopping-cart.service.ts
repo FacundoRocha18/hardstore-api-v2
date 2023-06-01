@@ -17,6 +17,10 @@ export class ShoppingCartService {
     return this.repository.findOneBy({ id });
   }
 
+  listAll(): Promise<ShoppingCart[]> {
+    return this.repository.find();
+  }
+
   create(body: CreateShoppingCartDto): Promise<ShoppingCart> {
     const cart = this.repository.create(body);
 

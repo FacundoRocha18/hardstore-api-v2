@@ -8,14 +8,12 @@ import { validateCustomerData } from 'src/utils';
 export class CustomersController {
   constructor(private readonly customersService: CustomersService) {}
 
-  @Post('/register')
-  async register(@Body() body: CreateCustomerDto): Promise<IcreateResponse> {
-    let registeredCustomer;
+  @Post('/create')
+  async create(@Body() body: CreateCustomerDto): Promise<IcreateResponse> {
+    let customer;
 
     try {
-      registeredCustomer = await this.customersService.create(
-        validateCustomerData(body),
-      );
+      customer = await this.customersService.create(validateCustomerData(body));
     } catch (error) {
       throw new BadRequestException(
         'Ya existe un usuario con esa dirección de email.',
@@ -25,7 +23,7 @@ export class CustomersController {
     return {
       status_code: 201,
       status_message: 'Registro exitoso',
-      id: registeredCustomer?.id,
+      id: customer?.id,
     };
   }
 }
