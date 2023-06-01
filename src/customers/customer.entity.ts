@@ -16,18 +16,16 @@ export class Customer {
   @PrimaryGeneratedColumn('uuid')
   id: UUID;
 
-  @Column({ nullable: true, type: 'text' })
+  @Column({ type: 'text' })
   name: string;
 
-  @Column({ nullable: true, type: 'text' })
+  @Column({ type: 'text' })
   email: string;
 
-  @Column({ nullable: true, type: 'text' })
+  @Column({ type: 'text' })
   password: string;
 
-  @OneToOne((type) => ShoppingCart, {
-    nullable: true,
-  })
+  @OneToOne(() => ShoppingCart, (shoppingCart) => shoppingCart.id)
   @JoinColumn({ name: 'shopping_cart_id' })
   shopping_cart_id: ShoppingCart;
 
