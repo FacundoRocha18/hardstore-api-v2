@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Delete,
@@ -62,7 +63,13 @@ export class ProductsController {
 
   @Post('/create')
   async create(@Body() body: CreateProductDto): Promise<IcreateResponse> {
-    const createdProduct = await this.productsService.create(body);
+    let createdProduct;
+
+    try {
+      createdProduct = await this.productsService.create(body);
+    } catch (error) {
+      throw new BadRequestException('Ya existe ese producto.');
+    }
 
     return {
       status_code: 201,
