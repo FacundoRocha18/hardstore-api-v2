@@ -1,23 +1,33 @@
+import { UUID } from 'crypto';
+
 export interface IResponse {
-  ok: boolean;
-  message: string;
+  status_code: number;
+  status_message: string;
+}
+
+export interface IfindOneResponse<T> extends IResponse {
+  data: T;
+}
+
+export interface IlistAllResponse<T> extends IResponse {
+  data: T[];
 }
 
 export interface IcreateResponse extends IResponse {
   id: UUID | undefined;
 }
 
-export interface IupdateResponse extends IResponse {
-  updatedData: Product;
-  updatedTimestamp: Date;
+export interface IupdateResponse<T> extends IResponse {
+  updated_data: T;
+  updated_timestamp: Date;
 }
 
 export interface IdeleteResponse extends IResponse {
   id: UUID;
-  deletedTimestamp: Date;
+  deleted_timestamp: Date;
 }
 
 export interface IrestoreResponse extends IResponse {
   id: UUID;
-  restoredTimestamp: Date;
+  restored_timestamp: Date;
 }

@@ -15,8 +15,8 @@ export class CustomersController {
     );
 
     return {
-      ok: true,
-      message: 'Registro exitoso',
+      status_code: 201,
+      status_message: 'Registro exitoso',
       id: registeredCustomer?.id,
     };
   }

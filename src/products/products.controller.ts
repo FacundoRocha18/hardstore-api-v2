@@ -12,24 +12,24 @@ import {
 } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './DTO/create-product.dto';
-import {
-  IcreateResponse,
-  IlistAllResponse,
-  IfindOneByIdResponse,
-  IupdateResponse,
-  IdeleteResponse,
-  IrestoreResponse,
-  IupdateStockResponse,
-} from './interfaces/products.interfaces';
 import { UUID } from 'crypto';
 import { UpdateProductStockDto } from './DTO/update-product-stock.dto';
+import { Product } from './product.entity';
+import {
+  IcreateResponse,
+  IdeleteResponse,
+  IfindOneResponse,
+  IlistAllResponse,
+  IrestoreResponse,
+  IupdateResponse,
+} from 'src/common.interfaces';
 
 @Controller('products')
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
   @Get('/find')
-  async findOneBy(@Query('id') id: UUID): Promise<IfindOneByIdResponse> {
+  async findOneBy(@Query('id') id: UUID): Promise<IfindOneResponse<Product>> {
     const product = await this.productsService.findOneBy(id);
 
     if (!product) {
@@ -37,14 +37,14 @@ export class ProductsController {
     }
 
     return {
-      ok: true,
-      message: 'El producto se encontró correctamente.',
+      status_code: 200,
+      status_message: 'El producto se encontró correctamente.',
       data: product,
     };
   }
 
   @Get('/listAll')
-  async listAll(): Promise<IlistAllResponse> {
+  async listAll(): Promise<IlistAllResponse<Product>> {
     const products = await this.productsService.listAll();
 
     if (products.length <= 0) {
@@ -54,8 +54,8 @@ export class ProductsController {
     }
 
     return {
-      ok: true,
-      message: 'Los productos se encontraron correctamente.',
+      status_code: 200,
+      status_message: 'Los productos se encontraron correctamente.',
       data: products,
     };
   }
@@ -65,10 +65,10 @@ export class ProductsController {
     const createdProduct = await this.productsService.create(body);
 
     return {
-      ok: true,
-      message:
+      status_code: 201,
+      status_message:
         'El nuevo producto se guardó correctamente. Puede usar el ID del producto creado para buscarlo.',
-      createdProductId: createdProduct?.id,
+      id: createdProduct?.id,
     };
   }
 
@@ -76,7 +76,7 @@ export class ProductsController {
   async update(
     @Query('id') id: UUID,
     @Body() body: CreateProductDto,
-  ): Promise<IupdateResponse> {
+  ): Promise<IupdateResponse<Product>> {
     const product = await this.productsService.findOneBy(id);
 
     if (!product) {
@@ -93,10 +93,10 @@ export class ProductsController {
     }
 
     return {
-      ok: true,
-      message: 'Se modificó el stock',
-      updatedProductData: product,
-      updatedTimestamp: new Date(),
+      status_code: 201,
+      status_message: 'Se modificaron los datos',
+      updated_data: product,
+      updated_timestamp: product.updated_at,
     };
   }
 
@@ -104,7 +104,7 @@ export class ProductsController {
   async updateStock(
     @Query('id') id: UUID,
     @Body() stock: UpdateProductStockDto,
-  ): Promise<IupdateStockResponse> {
+  ): Promise<IupdateResponse<Product>> {
     const product = await this.productsService.findOneBy(id);
 
     if (!product) {
@@ -121,11 +121,10 @@ export class ProductsController {
     }
 
     return {
-      ok: true,
-      message: 'Se modificó el stock',
-      updatedProductId: product.id,
-      newStock: product.stock,
-      updatedTimestamp: new Date(),
+      status_code: 201,
+      status_message: 'Se modificó el stock',
+      updated_data: product,
+      updated_timestamp: product.updated_at,
     };
   }
 
@@ -147,10 +146,10 @@ export class ProductsController {
     }
 
     return {
-      ok: true,
-      message: 'Se eliminó correctamente el producto.',
-      deletedProductId: id,
-      deletedTimestamp: new Date(),
+      status_code: 200,
+      status_message: 'Se eliminó correctamente el producto.',
+      id: id,
+      deleted_timestamp: product.deleted_at,
     };
   }
 
@@ -172,10 +171,10 @@ export class ProductsController {
     }
 
     return {
-      ok: true,
-      message: 'Se restauro correctamente el producto.',
-      restoredProductId: id,
-      restoredTimestamp: new Date(),
+      status_code: 200,
+      status_message: 'Se restauro correctamente el producto.',
+      id: id,
+      restored_timestamp: product.updated_at,
     };
   }
 }

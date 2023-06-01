@@ -12,8 +12,8 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-@Entity({ name: 'products_in_shopping_cart' })
-export class ProductsInShoppingCart {
+@Entity({ name: 'shopping_cart_items' })
+export class ShoppingCartItems {
   @PrimaryGeneratedColumn('uuid')
   id: UUID;
 

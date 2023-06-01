@@ -1,16 +1,16 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { ProductsInShoppingCartService } from '../products-in-shopping-cart.service';
+import { ShoppingCartItemsService } from '../shopping-cart-items.service';
 
 describe('ProductsInShoppingCartService', () => {
-  let service: ProductsInShoppingCartService;
+  let service: ShoppingCartItemsService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [ProductsInShoppingCartService],
+      providers: [ShoppingCartItemsService],
     }).compile();
 
-    service = module.get<ProductsInShoppingCartService>(
-      ProductsInShoppingCartService,
+    service = module.get<ShoppingCartItemsService>(
+      ShoppingCartItemsService,
     );
   });
 

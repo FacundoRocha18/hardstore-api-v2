@@ -7,8 +7,8 @@ import { Customer } from './customers/customer.entity';
 import { CustomersModule } from './customers/customers.module';
 import { ShoppingCart } from './shopping-cart/shopping-cart.entity';
 import { ShoppingCartModule } from './shopping-cart/shopping-cart.module';
-import { ProductsInShoppingCart } from './products-in-shopping-cart/products-in-shopping-cart.entity';
-import { ProductsInShoppingCartModule } from './products-in-shopping-cart/products-in-shopping-cart.module';
+import { ShoppingCartItems } from './shopping-cart-items/shopping-cart-items.entity';
+import { ShoppingCartItemsModule } from './shopping-cart-items/shopping-cart-items.module';
 require('dotenv').config();
 
 @Module({
@@ -20,13 +20,13 @@ require('dotenv').config();
       username: process.env.DATABASE_USER,
       password: process.env.DATABASE_PWD,
       database: process.env.DATABASE,
-      entities: [Product, Customer, ShoppingCart, ProductsInShoppingCart],
+      entities: [Product, Customer, ShoppingCart, ShoppingCartItems],
       synchronize: true, // Don't use synchronize: true on production
     }),
     ProductsModule,
     CustomersModule,
     ShoppingCartModule,
-    ProductsInShoppingCartModule,
+    ShoppingCartItemsModule,
   ],
   controllers: [],
   providers: [],

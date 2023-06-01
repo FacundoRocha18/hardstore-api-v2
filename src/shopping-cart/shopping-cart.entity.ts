@@ -1,6 +1,6 @@
 import { UUID } from 'crypto';
 import { Customer } from 'src/customers/customer.entity';
-import { ProductsInShoppingCart } from 'src/products-in-shopping-cart/products-in-shopping-cart.entity';
+import { ShoppingCartItems } from 'src/shopping-cart-items/shopping-cart-items.entity';
 import {
   Column,
   CreateDateColumn,
@@ -16,7 +16,7 @@ import {
 @Entity({ name: 'shopping_cart' })
 export class ShoppingCart {
   @OneToMany(
-    () => ProductsInShoppingCart,
+    () => ShoppingCartItems,
     (productsInShoppingCart) => productsInShoppingCart.id,
   )
   @PrimaryGeneratedColumn('uuid')
