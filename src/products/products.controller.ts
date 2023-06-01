@@ -31,7 +31,7 @@ export class ProductsController {
 
   @Get('/find')
   async findOneBy(@Query('id') id: UUID): Promise<IfindOneResponse<Product>> {
-    const product = await this.productsService.findOneBy(id);
+    const product = await this.productsService.findProductBy(id);
 
     if (!product) {
       throw new NotFoundException('No se encontró el producto especificado.');
@@ -46,7 +46,7 @@ export class ProductsController {
 
   @Get('/listAll')
   async listAll(): Promise<IlistAllResponse<Product>> {
-    const products = await this.productsService.listAll();
+    const products = await this.productsService.listAllProducts();
 
     if (products.length <= 0) {
       throw new NotFoundException(
@@ -66,7 +66,7 @@ export class ProductsController {
     let createdProduct;
 
     try {
-      createdProduct = await this.productsService.create(body);
+      createdProduct = await this.productsService.createProduct(body);
     } catch (error) {
       throw new BadRequestException('Ya existe ese producto.');
     }
@@ -84,13 +84,13 @@ export class ProductsController {
     @Query('id') id: UUID,
     @Body() body: CreateProductDto,
   ): Promise<IupdateResponse<Product>> {
-    const product = await this.productsService.findOneBy(id);
+    const product = await this.productsService.findProductBy(id);
 
     if (!product) {
       throw new NotFoundException('No se encontró el producto especificado');
     }
 
-    const queryResult = await this.productsService.update(id, body);
+    const queryResult = await this.productsService.updateProduct(id, body);
 
     if (!queryResult.affected) {
       throw new HttpException(
@@ -112,7 +112,7 @@ export class ProductsController {
     @Query('id') id: UUID,
     @Body() stock: UpdateProductStockDto,
   ): Promise<IupdateResponse<Product>> {
-    const product = await this.productsService.findOneBy(id);
+    const product = await this.productsService.findProductBy(id);
 
     if (!product) {
       throw new NotFoundException('No se encontró el producto especificado');
@@ -137,13 +137,13 @@ export class ProductsController {
 
   @Delete('/delete')
   async deleteOneBy(@Query('id') id: UUID): Promise<IdeleteResponse> {
-    const product = await this.productsService.findOneBy(id);
+    const product = await this.productsService.findProductBy(id);
 
     if (!product) {
       throw new NotFoundException(`No se encontró el producto de ID: ${id}`);
     }
 
-    const queryResult = await this.productsService.deleteOneBy(id);
+    const queryResult = await this.productsService.deleteProductBy(id);
 
     if (!queryResult.affected) {
       throw new HttpException(
@@ -162,13 +162,13 @@ export class ProductsController {
 
   @Patch('/restore')
   async restoreOneBy(@Query('id') id: UUID): Promise<IrestoreResponse> {
-    const product = await this.productsService.findDeletedBy(id);
+    const product = await this.productsService.findProductDeletedBy(id);
 
     if (!product) {
       throw new NotFoundException(`No se encontró el producto de ID: ${id}`);
     }
 
-    const queryResult = await this.productsService.restoreOneBy(id);
+    const queryResult = await this.productsService.restoreProductBy(id);
 
     if (!queryResult.affected) {
       throw new HttpException(

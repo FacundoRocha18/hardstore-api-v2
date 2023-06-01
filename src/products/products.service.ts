@@ -10,45 +10,45 @@ import { UpdateProductStockDto } from './DTO/update-product-stock.dto';
 export class ProductsService {
   constructor(
     @InjectRepository(Product)
-    private productsRepository: Repository<Product>,
+    private repository: Repository<Product>,
   ) {}
 
-  findOneBy(id: UUID): Promise<Product | null> {
-    return this.productsRepository.findOne({
+  findProductBy(id: UUID): Promise<Product | null> {
+    return this.repository.findOne({
       where: { id },
     });
   }
 
-  findDeletedBy(id: UUID): Promise<Product | null> {
-    return this.productsRepository.findOne({
-      where: { id },
+  findProductDeletedBy(id: UUID): Promise<Product | null> {
+    return this.repository.findOne({
       withDeleted: true,
+      where: { id },
     });
   }
 
-  listAll(): Promise<Product[] | null> {
-    return this.productsRepository.find();
+  listAllProducts(): Promise<Product[] | null> {
+    return this.repository.find();
   }
 
-  create(body: CreateProductDto): Promise<Product> {
-    const product = this.productsRepository.create(body);
+  createProduct(body: CreateProductDto): Promise<Product> {
+    const product = this.repository.create(body);
 
-    return this.productsRepository.save(product);
+    return this.repository.save(product);
   }
 
-  update(id: UUID, body: CreateProductDto): Promise<UpdateResult> {
-    return this.productsRepository.update(id, body);
+  updateProduct(id: UUID, body: CreateProductDto): Promise<UpdateResult> {
+    return this.repository.update(id, body);
   }
 
   updateStock(id: UUID, stock: UpdateProductStockDto): Promise<UpdateResult> {
-    return this.productsRepository.update(id, stock);
+    return this.repository.update(id, stock);
   }
 
-  deleteOneBy(id: UUID): Promise<DeleteResult> {
-    return this.productsRepository.softDelete({ id });
+  deleteProductBy(id: UUID): Promise<DeleteResult> {
+    return this.repository.softDelete({ id });
   }
 
-  restoreOneBy(id: UUID) {
-    return this.productsRepository.restore(id);
+  restoreProductBy(id: UUID) {
+    return this.repository.restore(id);
   }
 }
