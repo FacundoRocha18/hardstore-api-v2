@@ -8,8 +8,6 @@ import {
   Query,
   Delete,
   Patch,
-  HttpException,
-  HttpStatus,
 } from '@nestjs/common';
 import { CustomersService } from './customers.service';
 import { CreateCustomerDto } from './DTO/create-customer.dto';
