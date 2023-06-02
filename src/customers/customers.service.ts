@@ -1,9 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DeleteResult, Repository } from 'typeorm';
+import { DeleteResult, Repository, UpdateResult } from 'typeorm';
 import { Customer } from './customer.entity';
 import { CreateCustomerDto } from './DTO/create-customer.dto';
 import { UUID } from 'crypto';
+import { UpdateCustomerDto } from './DTO/update-customer.dto';
 
 @Injectable()
 export class CustomersService {
@@ -34,7 +35,25 @@ export class CustomersService {
     return this.repository.save(customer);
   }
 
-  deleteCustomerBy(id: UUID): Promise<DeleteResult> {
+  softDeleteCustomerBy(id: UUID): Promise<UpdateResult> {
     return this.repository.softDelete({ id });
+  }
+
+  hardDeleteCustomerBy(id: UUID): Promise<DeleteResult> {
+    return this.repository.delete({ id });
+  }
+
+  restoreDeletedCustomer(id: UUID): Promise<UpdateResult> {
+    return this.repository.restore(id);
+  }
+
+  updateCustomer(
+    id: UUID,
+    { name, email, password }: UpdateCustomerDto,
+  ): Promise<UpdateResult> {
+    return this.repository.update(
+      { id: id },
+      { name: name, email: email, password: password },
+    );
   }
 }

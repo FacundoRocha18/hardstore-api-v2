@@ -48,7 +48,7 @@ export class ProductsService {
     return this.repository.softDelete({ id });
   }
 
-  restoreProductBy(id: UUID) {
+  restoreProductBy(id: UUID): Promise<UpdateResult> {
     return this.repository.restore(id);
   }
 }

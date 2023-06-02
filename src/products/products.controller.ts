@@ -179,7 +179,7 @@ export class ProductsController {
 
     return {
       status_code: 200,
-      status_message: 'Se restauro correctamente el producto.',
+      status_message: 'Se restauró correctamente el producto.',
       id: id,
       restored_timestamp: product.updated_at,
     };
