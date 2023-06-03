@@ -5,6 +5,7 @@ import { Customer } from './customer.entity';
 import { CreateCustomerDto } from './DTO/create-customer.dto';
 import { UUID } from 'crypto';
 import { UpdateCustomerDto } from './DTO/update-customer.dto';
+import { hashPassword } from 'src/utils';
 
 @Injectable()
 export class CustomersService {
@@ -29,8 +30,11 @@ export class CustomersService {
     return this.repository.find({ withDeleted: true });
   }
 
-  createCustomer(body: CreateCustomerDto): Promise<Customer> {
-    const customer = this.repository.create(body);
+  async createCustomer(body: CreateCustomerDto): Promise<Customer> {
+    const customer = this.repository.create({
+      ...body,
+      password: await hashPassword(body.password),
+    });
 
     return this.repository.save(customer);
   }
@@ -47,13 +51,23 @@ export class CustomersService {
     return this.repository.restore(id);
   }
 
-  updateCustomer(
+  async updateCustomer(
     id: UUID,
-    { name, email, password }: UpdateCustomerDto,
+    body: UpdateCustomerDto,
   ): Promise<UpdateResult> {
     return this.repository.update(
-      { id: id },
-      { name: name, email: email, password: password },
+      { id },
+      { ...body, password: await hashPassword(body.password) },
+    );
+  }
+
+  async changePassword(
+    id: UUID,
+    { password }: UpdateCustomerDto,
+  ): Promise<UpdateResult> {
+    return this.repository.update(
+      { id },
+      { password: await hashPassword(password) },
     );
   }
 }

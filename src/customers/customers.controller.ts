@@ -19,7 +19,11 @@ import {
   IrestoreResponse,
   IupdateResponse,
 } from 'src/common.interfaces';
-import { DeleteTypes, checkQueryResult, validateCustomerData } from 'src/utils';
+import {
+  DeleteTypes,
+  checkQueryResult,
+  compareHashedPassword,
+} from 'src/utils';
 import { UUID } from 'crypto';
 import { Customer } from './customer.entity';
 import { UpdateCustomerDto } from './DTO/update-customer.dto';
@@ -67,10 +71,10 @@ export class CustomersController {
     let customer;
 
     try {
-      customer = await this.service.createCustomer(validateCustomerData(body));
+      customer = await this.service.createCustomer(body);
     } catch (error) {
       throw new BadRequestException(
-        'Ya existe un usuario con esa dirección de email.',
+        'Ya existe un usuario con esa dirección de email.' + error,
       );
     }
 
@@ -148,7 +152,7 @@ export class CustomersController {
 
     if (!customer) {
       throw new NotFoundException(
-        'No se encontró el cliente. Esto puede deberse a que el id es incorrecto.',
+        'No se encontró el cliente. Esto puede deberse a que el id enviado es incorrecto.',
       );
     }
 
@@ -157,6 +161,33 @@ export class CustomersController {
     return {
       status_code: 201,
       status_message: 'Se modificaron correctamente los datos del cliente.',
+      updated_data: customer,
+      updated_timestamp: customer.updated_at,
+    };
+  }
+
+  @Patch('/change-password')
+  async changePassword(
+    @Query('id') id: UUID,
+    @Body() body: UpdateCustomerDto,
+  ): Promise<IupdateResponse<Customer>> {
+    const customer = await this.service.findCustomerBy(id);
+
+    if (!customer) {
+      throw new NotFoundException(
+        'No se encontró el cliente. Esto puede deberse a que el id es incorrecto.',
+      );
+    }
+
+    if (!compareHashedPassword(body.actualPassword, customer.password)) {
+      throw new BadRequestException('La contraseña ingresada es incorrecta.');
+    }
+
+    checkQueryResult(await this.service.changePassword(id, body));
+
+    return {
+      status_code: 201,
+      status_message: 'Se cambió correctamente la contraseña.',
       updated_data: customer,
       updated_timestamp: customer.updated_at,
     };
