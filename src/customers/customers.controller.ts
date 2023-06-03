@@ -8,6 +8,8 @@ import {
   Query,
   Delete,
   Patch,
+  UseInterceptors,
+  ClassSerializerInterceptor,
 } from '@nestjs/common';
 import { CustomersService } from './customers.service';
 import { CreateCustomerDto } from './DTO/create-customer.dto';
@@ -32,6 +34,7 @@ import { UpdateCustomerDto } from './DTO/update-customer.dto';
 export class CustomersController {
   constructor(private readonly service: CustomersService) {}
 
+  @UseInterceptors(ClassSerializerInterceptor)
   @Get('/find')
   async findCustomerBy(
     @Query('id') id: UUID,
@@ -49,6 +52,7 @@ export class CustomersController {
     };
   }
 
+  @UseInterceptors(ClassSerializerInterceptor)
   @Get('/list')
   async listAllCustomers(): Promise<IlistAllResponse<Customer>> {
     const customers = await this.service.listAllCustomers();
@@ -143,6 +147,7 @@ export class CustomersController {
     };
   }
 
+  @UseInterceptors(ClassSerializerInterceptor)
   @Patch('/update')
   async updateCustomer(
     @Query('id') id: UUID,
@@ -166,6 +171,7 @@ export class CustomersController {
     };
   }
 
+  @UseInterceptors(ClassSerializerInterceptor)
   @Patch('/change-password')
   async changePassword(
     @Query('id') id: UUID,

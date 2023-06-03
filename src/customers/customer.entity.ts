@@ -1,3 +1,4 @@
+import { Exclude } from 'class-transformer';
 import { UUID } from 'crypto';
 import { ShoppingCart } from 'src/shopping-cart/shopping-cart.entity';
 import {
@@ -23,6 +24,7 @@ export class Customer {
   email: string;
 
   @Column({ type: 'text' })
+  @Exclude()
   password: string;
 
   @OneToOne(() => ShoppingCart, (shoppingCart) => shoppingCart.id)
