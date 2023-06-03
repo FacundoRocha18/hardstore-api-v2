@@ -21,14 +21,12 @@ import {
   IrestoreResponse,
   IupdateResponse,
 } from 'src/common.interfaces';
-import {
-  DeleteTypes,
-  checkQueryResult,
-  compareHashedPassword,
-} from 'src/utils';
+import { checkQueryResult, compareHashedPassword } from 'src/utils';
 import { UUID } from 'crypto';
 import { Customer } from './customer.entity';
 import { UpdateCustomerDto } from './DTO/update-customer.dto';
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+require('dotenv').config();
 
 @Controller('customers')
 export class CustomersController {
@@ -90,10 +88,7 @@ export class CustomersController {
   }
 
   @Delete('/delete')
-  async softDeleteCustomer(
-    @Query('id') id: UUID,
-    @Query('delete_type') deleteType: DeleteTypes,
-  ): Promise<IdeleteResponse> {
+  async softDeleteCustomer(@Query('id') id: UUID): Promise<IdeleteResponse> {
     const customer = await this.service.findDeletedCustomerBy(id);
 
     if (!customer) {
@@ -103,10 +98,12 @@ export class CustomersController {
     }
 
     if (customer.deleted_at) {
-      throw new NotFoundException('El cliente ya fue eliminado anteriormente.');
+      throw new BadRequestException(
+        'El cliente ya fue eliminado anteriormente.',
+      );
     }
 
-    if (DeleteTypes[deleteType]) {
+    if (process.env.DELETE_TYPE === 'hard') {
       checkQueryResult(await this.service.hardDeleteCustomerBy(id));
 
       return {

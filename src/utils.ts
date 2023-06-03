@@ -8,8 +8,8 @@ import {
 } from '@nestjs/common';
 
 export enum DeleteTypes {
-  soft = 'soft',
-  hard = 'hard',
+  soft = '1',
+  hard = '2',
 }
 
 export const hashPassword = async (password: string): Promise<string> => {
