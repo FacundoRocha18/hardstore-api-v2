@@ -21,7 +21,7 @@ require('dotenv').config();
       password: process.env.DATABASE_PWD,
       database: process.env.DATABASE,
       entities: [Product, Customer, ShoppingCart, ShoppingCartItems],
-      synchronize: true, // Don't use synchronize: true on production
+      synchronize: Boolean(process.env.DATABASE_SYNC), // Don't use synchronize: true on production
     }),
     ProductsModule,
     CustomersModule,
