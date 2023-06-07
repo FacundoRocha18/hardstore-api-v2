@@ -9,8 +9,6 @@ import { ShoppingCart } from './shopping-cart/shopping-cart.entity';
 import { ShoppingCartModule } from './shopping-cart/shopping-cart.module';
 import { ShoppingCartItems } from './shopping-cart-items/shopping-cart-items.entity';
 import { ShoppingCartItemsModule } from './shopping-cart-items/shopping-cart-items.module';
-import { EmployeesService } from './employees/employees.service';
-import { EmployeesController } from './employees/employees.controller';
 import { EmployeesModule } from './employees/employees.module';
 require('dotenv').config();
 
@@ -32,7 +30,7 @@ require('dotenv').config();
     ShoppingCartItemsModule,
     EmployeesModule,
   ],
-  controllers: [EmployeesController],
-  providers: [EmployeesService],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}
