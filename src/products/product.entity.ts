@@ -22,7 +22,7 @@ export class Product {
   @Column({ type: 'decimal', default: 0.0 })
   price: number;
 
-  @Column({ type: 'text', default: '' })
+  @Column({ type: 'text', default: 'Facundo Rocha' })
   uploaded_by: string;
 
   @CreateDateColumn()

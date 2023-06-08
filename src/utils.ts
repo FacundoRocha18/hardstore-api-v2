@@ -5,12 +5,9 @@ import {
   HttpException,
   HttpStatus,
   InternalServerErrorException,
+  NotFoundException,
 } from '@nestjs/common';
-
-export enum DeleteTypes {
-  soft = '1',
-  hard = '2',
-}
+import { Customer } from './customers/customer.entity';
 
 export const hashPassword = async (password: string): Promise<string> => {
   let hashedPassword: string;
@@ -38,4 +35,14 @@ export const checkQueryResult = (queryResult: UpdateResult | DeleteResult) => {
       HttpStatus.INTERNAL_SERVER_ERROR,
     );
   }
+};
+
+export const customerExists = (customer: Customer): boolean => {
+  if (!customer) {
+    throw new NotFoundException(
+      'No se encontró el cliente. Esto puede deberse a que el id es incorrecto.',
+    );
+  }
+
+  return true;
 };

@@ -1,6 +1,4 @@
 import {
-  BadRequestException,
-  NotFoundException,
   Body,
   Controller,
   Post,
@@ -12,7 +10,7 @@ import {
   ClassSerializerInterceptor,
 } from '@nestjs/common';
 import { CustomersService } from './customers.service';
-import { CreateCustomerDto } from './DTO/create-customer.dto';
+import { CreateCustomerDto } from './dtos/create-customer.dto';
 import {
   IcreateResponse,
   IdeleteResponse,
@@ -21,12 +19,9 @@ import {
   IrestoreResponse,
   IupdateResponse,
 } from 'src/common.interfaces';
-import { checkQueryResult, compareHashedPassword } from 'src/utils';
 import { UUID } from 'crypto';
 import { Customer } from './customer.entity';
-import { UpdateCustomerDto } from './DTO/update-customer.dto';
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-require('dotenv').config();
+import { UpdateCustomerDto } from './dtos/update-customer.dto';
 
 @Controller('customers')
 export class CustomersController {
@@ -38,10 +33,6 @@ export class CustomersController {
     @Query('id') id: UUID,
   ): Promise<IfindOneResponse<Customer>> {
     const customer = await this.service.findCustomerBy(id);
-
-    if (!customer) {
-      throw new NotFoundException('No se encontró el cliente.');
-    }
 
     return {
       status_code: 200,
@@ -55,12 +46,6 @@ export class CustomersController {
   async listAllCustomers(): Promise<IlistAllResponse<Customer>> {
     const customers = await this.service.listAllCustomers();
 
-    if (customers.length <= 0) {
-      throw new NotFoundException(
-        'No se encontraron clientes. Esto puede deberse a que hayan sido eliminados',
-      );
-    }
-
     return {
       status_code: 200,
       status_message: 'Se encontraron correctamente los clientes.',
@@ -70,15 +55,7 @@ export class CustomersController {
 
   @Post('/create')
   async create(@Body() body: CreateCustomerDto): Promise<IcreateResponse> {
-    let customer;
-
-    try {
-      customer = await this.service.createCustomer(body);
-    } catch (error) {
-      throw new BadRequestException(
-        'Ya existe un usuario con esa dirección de email.' + error,
-      );
-    }
+    const customer = await this.service.createCustomer(body);
 
     return {
       status_code: 201,
@@ -89,32 +66,7 @@ export class CustomersController {
 
   @Delete('/delete')
   async softDeleteCustomer(@Query('id') id: UUID): Promise<IdeleteResponse> {
-    const customer = await this.service.findDeletedCustomerBy(id);
-
-    if (!customer) {
-      throw new NotFoundException(
-        'No se encontró el cliente. Esto puede deberse a que el id es incorrecto.',
-      );
-    }
-
-    if (customer.deleted_at) {
-      throw new BadRequestException(
-        'El cliente ya fue eliminado anteriormente.',
-      );
-    }
-
-    if (process.env.DELETE_TYPE === 'hard') {
-      checkQueryResult(await this.service.hardDeleteCustomerBy(id));
-
-      return {
-        status_code: 200,
-        status_message: 'El cliente se eliminó correctamente.',
-        id: id,
-        deleted_timestamp: customer.deleted_at,
-      };
-    }
-
-    checkQueryResult(await this.service.softDeleteCustomerBy(id));
+    const customer = await this.service.deleteCustomerBy(id);
 
     return {
       status_code: 200,
@@ -126,15 +78,7 @@ export class CustomersController {
 
   @Patch('/restore')
   async restoreCustomer(@Query('id') id: UUID): Promise<IrestoreResponse> {
-    const customer = await this.service.findDeletedCustomerBy(id);
-
-    if (!customer) {
-      throw new NotFoundException(
-        'No se encontró el cliente. Esto puede deberse a que el id es incorrecto.',
-      );
-    }
-
-    checkQueryResult(await this.service.restoreDeletedCustomer(id));
+    const customer = await this.service.restoreDeletedCustomer(id);
 
     return {
       status_code: 200,
@@ -150,15 +94,7 @@ export class CustomersController {
     @Query('id') id: UUID,
     @Body() body: UpdateCustomerDto,
   ): Promise<IupdateResponse<Customer>> {
-    const customer = await this.service.findCustomerBy(id);
-
-    if (!customer) {
-      throw new NotFoundException(
-        'No se encontró el cliente. Esto puede deberse a que el id enviado es incorrecto.',
-      );
-    }
-
-    checkQueryResult(await this.service.updateCustomer(id, body));
+    const customer = await this.service.updateCustomer(id, body);
 
     return {
       status_code: 201,
@@ -174,19 +110,7 @@ export class CustomersController {
     @Query('id') id: UUID,
     @Body() body: UpdateCustomerDto,
   ): Promise<IupdateResponse<Customer>> {
-    const customer = await this.service.findCustomerBy(id);
-
-    if (!customer) {
-      throw new NotFoundException(
-        'No se encontró el cliente. Esto puede deberse a que el id es incorrecto.',
-      );
-    }
-
-    if (!compareHashedPassword(body.actualPassword, customer.password)) {
-      throw new BadRequestException('La contraseña ingresada es incorrecta.');
-    }
-
-    checkQueryResult(await this.service.changePassword(id, body));
+    const customer = await this.service.changePassword(id, body);
 
     return {
       status_code: 201,
