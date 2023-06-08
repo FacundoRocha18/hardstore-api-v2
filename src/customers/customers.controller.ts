@@ -32,24 +32,20 @@ export class CustomersController {
   async findCustomerBy(
     @Query('id') id: UUID,
   ): Promise<IfindOneResponse<Customer>> {
-    const customer = await this.service.findCustomerBy(id);
-
     return {
       status_code: 200,
       status_message: 'Se encontró correctamente el cliente.',
-      data: customer,
+      data: await this.service.findCustomerBy(id),
     };
   }
 
   @UseInterceptors(ClassSerializerInterceptor)
   @Get('/list')
   async listAllCustomers(): Promise<IlistAllResponse<Customer>> {
-    const customers = await this.service.listAllCustomers();
-
     return {
       status_code: 200,
       status_message: 'Se encontraron correctamente los clientes.',
-      data: customers,
+      data: await this.service.listAllCustomers(),
     };
   }
 
