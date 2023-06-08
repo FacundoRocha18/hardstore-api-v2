@@ -71,7 +71,7 @@ export class CustomersService {
       });
     } catch (error) {
       throw new InternalServerErrorException(
-        `Ocurrió un error al crear el usuario: ${error}`,
+        `Ocurrió un error al crear el cliente: ${error}`,
       );
     }
 

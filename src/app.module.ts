@@ -10,6 +10,7 @@ import { ShoppingCartModule } from './shopping-cart/shopping-cart.module';
 import { ShoppingCartItems } from './shopping-cart-items/shopping-cart-items.entity';
 import { ShoppingCartItemsModule } from './shopping-cart-items/shopping-cart-items.module';
 import { EmployeesModule } from './employees/employees.module';
+import { Employee } from './employees/employee.entity';
 require('dotenv').config();
 
 @Module({
@@ -21,8 +22,9 @@ require('dotenv').config();
       username: process.env.DATABASE_USER,
       password: process.env.DATABASE_PWD,
       database: process.env.DATABASE,
-      entities: [Product, Customer, ShoppingCart, ShoppingCartItems],
-      synchronize: Boolean(process.env.DATABASE_SYNC), // Don't use synchronize: true on production
+      entities: [Product, Customer, ShoppingCart, ShoppingCartItems, Employee],
+      // Important: Don't use synchronize: true on prod
+      synchronize: Boolean(process.env.DATABASE_SYNC),
     }),
     ProductsModule,
     CustomersModule,
