@@ -125,7 +125,7 @@ export class CustomersService {
 
   async changePassword(id: UUID, body: UpdateCustomerDto): Promise<Customer> {
     const customer = await this.findCustomerBy(id);
-    const checkPasswordMatch = await compareHashedPassword(
+    const checkPasswordMatch = compareHashedPassword(
       body.actualPassword,
       customer.password,
     );
