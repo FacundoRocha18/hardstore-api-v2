@@ -9,7 +9,9 @@ describe('ProductsInShoppingCartController', () => {
       controllers: [Shopping_Cart_Items_Controller],
     }).compile();
 
-    controller = module.get<Shopping_Cart_Items_Controller>(Shopping_Cart_Items_Controller);
+    controller = module.get<Shopping_Cart_Items_Controller>(
+      Shopping_Cart_Items_Controller,
+    );
   });
 
   it('should be defined', () => {
