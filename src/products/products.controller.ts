@@ -10,7 +10,7 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
-import { ProductsService } from './products.service';
+import { Products_Service } from './products.service';
 import { CreateProductDto } from './DTO/create-product.dto';
 import {
   IcreateResponse,
@@ -26,7 +26,7 @@ import { UpdateProductStockDto } from './DTO/update-product-stock.dto';
 
 @Controller('products')
 export class ProductsController {
-  constructor(private readonly productsService: ProductsService) {}
+  constructor(private readonly productsService: Products_Service) {}
 
   @Get('/find')
   async findOneBy(@Query('id') id: UUID): Promise<IfindOneByIdResponse> {

@@ -1,5 +1,5 @@
 import { UUID } from 'crypto';
-import { ShoppingCart } from 'src/shopping-cart/shopping-cart.entity';
+import { Shopping_Cart } from 'src/shopping-cart/shopping-cart.entity';
 import {
   Column,
   CreateDateColumn,
@@ -25,11 +25,11 @@ export class Customer {
   @Column({ nullable: true, type: 'text' })
   password: string;
 
-  @OneToOne((type) => ShoppingCart, {
+  @OneToOne(() => Shopping_Cart, {
     nullable: true,
   })
   @JoinColumn({ name: 'shopping_cart_id' })
-  shopping_cart_id: ShoppingCart;
+  shopping_cart_id: Shopping_Cart;
 
   @CreateDateColumn()
   created_at: Date;

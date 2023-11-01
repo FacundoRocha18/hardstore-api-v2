@@ -7,48 +7,48 @@ import { CreateProductDto } from './DTO/create-product.dto';
 import { UpdateProductStockDto } from './DTO/update-product-stock.dto';
 
 @Injectable()
-export class ProductsService {
+export class Products_Service {
   constructor(
     @InjectRepository(Product)
-    private productsRepository: Repository<Product>,
+    private repository: Repository<Product>,
   ) {}
 
   findOneBy(id: UUID): Promise<Product | null> {
-    return this.productsRepository.findOne({
+    return this.repository.findOne({
       where: { id },
     });
   }
 
   findDeletedBy(id: UUID): Promise<Product | null> {
-    return this.productsRepository.findOne({
+    return this.repository.findOne({
       where: { id },
       withDeleted: true,
     });
   }
 
   listAll(): Promise<Product[] | null> {
-    return this.productsRepository.find();
+    return this.repository.find();
   }
 
   create(body: CreateProductDto): Promise<Product> {
-    const product = this.productsRepository.create(body);
+    const product = this.repository.create(body);
 
-    return this.productsRepository.save(product);
+    return this.repository.save(product);
   }
 
   update(id: UUID, body: CreateProductDto): Promise<UpdateResult> {
-    return this.productsRepository.update(id, body);
+    return this.repository.update(id, body);
   }
 
   updateStock(id: UUID, stock: UpdateProductStockDto): Promise<UpdateResult> {
-    return this.productsRepository.update(id, stock);
+    return this.repository.update(id, stock);
   }
 
   deleteOneBy(id: UUID): Promise<DeleteResult> {
-    return this.productsRepository.softDelete({ id });
+    return this.repository.softDelete({ id });
   }
 
   restoreOneBy(id: UUID) {
-    return this.productsRepository.restore(id);
+    return this.repository.restore(id);
   }
 }

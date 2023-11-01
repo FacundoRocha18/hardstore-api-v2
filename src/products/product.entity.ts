@@ -4,9 +4,12 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  JoinColumn,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Shopping_Cart_Item } from '../products-in-shopping-cart/shopping-cart-item.entity';
 
 @Entity({ name: 'product' })
 export class Product {
@@ -24,6 +27,9 @@ export class Product {
 
   @Column({ nullable: true, type: 'text' })
   created_by: string;
+
+  @OneToOne(() => Shopping_Cart_Item)
+  shopping_cart_items: Shopping_Cart_Item;
 
   @CreateDateColumn()
   created_at: Date;
