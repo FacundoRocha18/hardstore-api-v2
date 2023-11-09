@@ -4,14 +4,13 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
-  JoinColumn,
   OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { Shopping_Cart_Item } from '../products-in-shopping-cart/shopping-cart-item.entity';
 
-@Entity({ name: 'product' })
+@Entity({ name: 'products' })
 export class Product {
   @PrimaryGeneratedColumn('uuid')
   id: UUID;

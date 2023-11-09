@@ -3,6 +3,7 @@ import { Shopping_Cart_Item } from './shopping-cart-item.entity';
 import { Shopping_Cart_Items_Service } from './shopping-cart-items.service';
 import { Create_Shopping_Cart_Item_Dto } from './dto/create-shopping-cart-item.dto';
 import { UUID } from 'crypto';
+import { Shopping_Cart } from '../shopping-cart/shopping-cart.entity';
 
 @Controller('cart-items')
 export class Shopping_Cart_Items_Controller {
@@ -21,7 +22,7 @@ export class Shopping_Cart_Items_Controller {
   @Post('/add-product')
   async add_product(
     @Body() body: Create_Shopping_Cart_Item_Dto,
-  ): Promise<Shopping_Cart_Item> {
+  ): Promise<Shopping_Cart> {
     const { shopping_cart_id, product_id } = body;
 
     return await this.service.add(body, shopping_cart_id, product_id);

@@ -18,14 +18,14 @@ export class Shopping_Cart_Item {
   @Column()
   quantity: number;
 
-  @Column()
+  @Column({ nullable: true, type: 'decimal' })
   unit_price: number;
 
-  @Column()
+  @Column({ nullable: true, type: 'decimal' })
   subtotal: number;
 
   @OneToOne(() => Product)
-  @JoinColumn({ name: 'product' })
+  @JoinColumn()
   product: Product;
 
   @ManyToOne(

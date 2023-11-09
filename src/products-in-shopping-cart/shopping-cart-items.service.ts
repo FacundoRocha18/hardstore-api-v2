@@ -6,6 +6,7 @@ import { UUID } from 'crypto';
 import { Create_Shopping_Cart_Item_Dto } from './dto/create-shopping-cart-item.dto';
 import { Products_Service } from '../products/products.service';
 import { Shopping_Cart_Service } from '../shopping-cart/shopping-cart.service';
+import { Shopping_Cart } from '../shopping-cart/shopping-cart.entity';
 
 @Injectable()
 export class Shopping_Cart_Items_Service {
@@ -43,7 +44,7 @@ export class Shopping_Cart_Items_Service {
     body: Partial<Create_Shopping_Cart_Item_Dto>,
     shopping_cart_id: UUID,
     product_id: UUID,
-  ): Promise<Shopping_Cart_Item> {
+  ): Promise<Shopping_Cart> {
     const { quantity } = body;
     const product = await this.products_service.findOneBy(product_id);
     const shopping_cart = await this.shopping_cart_service.find(
@@ -59,7 +60,9 @@ export class Shopping_Cart_Items_Service {
       subtotal,
     });
 
-    return await this.repository.save(shopping_cart_item);
+    const result = await this.repository.save(shopping_cart_item);
+
+    return result.shopping_cart;
   }
 
   async update(
