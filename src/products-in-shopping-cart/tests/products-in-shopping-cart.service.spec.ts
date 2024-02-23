@@ -9,7 +9,9 @@ describe('ProductsInShoppingCartService', () => {
       providers: [Shopping_Cart_Items_Service],
     }).compile();
 
-    service = module.get<Shopping_Cart_Items_Service>(Shopping_Cart_Items_Service);
+    service = module.get<Shopping_Cart_Items_Service>(
+      Shopping_Cart_Items_Service,
+    );
   });
 
   it('should be defined', () => {

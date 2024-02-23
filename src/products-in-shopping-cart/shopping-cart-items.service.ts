@@ -47,9 +47,19 @@ export class Shopping_Cart_Items_Service {
   ): Promise<Shopping_Cart> {
     const { quantity } = body;
     const product = await this.products_service.findOneBy(product_id);
+
+    if (!product) {
+      throw new NotFoundException('No se encontró el producto');
+    }
+
     const shopping_cart = await this.shopping_cart_service.find(
       shopping_cart_id,
     );
+
+    if (!shopping_cart) {
+      throw new NotFoundException('No se encontró el carrito');
+    }
+
     const subtotal = product.price * quantity;
 
     const shopping_cart_item = this.repository.create({
@@ -61,7 +71,6 @@ export class Shopping_Cart_Items_Service {
     });
 
     const result = await this.repository.save(shopping_cart_item);
-
     return result.shopping_cart;
   }
 
